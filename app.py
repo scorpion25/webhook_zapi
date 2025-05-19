@@ -19,8 +19,8 @@ def webhook():
     data = request.json
     print("📩 Dados recebidos do Z-API:", data, flush=True)
 
-    numero = data.get("message", {}).get("phone")
-    texto = data.get("message", "")
+    numero = data.get("phone")
+    texto = data.get("text", {}).get("message", "")
 
     print("🔎 Número recebido:", numero, flush=True)
     print("🔎 Texto recebido:", texto, flush=True)
