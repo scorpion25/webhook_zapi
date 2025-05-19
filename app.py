@@ -17,13 +17,13 @@ HEADERS = {
 @app.route('/webhook', methods=['POST'])
 def webhook():
     data = request.json
-    print("📩 Dados recebidos do Z-API:", data)
+    print("📩 Dados recebidos do Z-API:", data, flush=True)
 
     numero = data.get("message", {}).get("phone")
     texto = data.get("message", "")
 
-    print("🔎 Número recebido:", numero)
-    print("🔎 Texto recebido:", texto)
+    print("🔎 Número recebido:", numero, flush=True)
+    print("🔎 Texto recebido:", texto, flush=True)
 
     if numero and texto:
         texto = texto.strip().lower()
@@ -36,13 +36,13 @@ def webhook():
             resposta = "🤖 Por favor, responda com:\n1️⃣ - Sim\n2️⃣ - Não"
 
         payload = {"phone": numero, "message": resposta}
-        print("📤 Enviando resposta para número:", numero)
-        print("📨 Conteúdo da mensagem:", resposta)
+        print("📤 Enviando resposta para número:", numero, flush=True)
+        print("📨 Conteúdo da mensagem:", resposta, flush=True)
 
         r = requests.post(ZAPI_URL, json=payload, headers=HEADERS)
-        print("✅ Retorno da Z-API:", r.status_code, r.text)
+        print("✅ Retorno da Z-API:", r.status_code, r.text, flush=True)
     else:
-        print("⚠️ Número ou texto ausentes na mensagem recebida.")
+        print("⚠️ Número ou texto ausentes na mensagem recebida.", flush=True)
 
     return jsonify({"status": "ok"})
 
