@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 
-# Dados reais
+# Dados reais da Z-API
 ZAPI_URL = "https://api.z-api.io/instances/3E1664822BF440DCF6C9FE99C2B48794/token/3E6D6FDD5AF8252B380DACA8/send-text"
 CLIENT_TOKEN = "F466390c69345429ba80cec680a7f5987S"
 SUPORTE_NUMERO = "5519993203350"
@@ -20,13 +20,14 @@ def webhook():
     print("📩 Dados recebidos do Z-API:", data)
 
     numero = data.get("message", {}).get("phone")
-    texto = data.get("message", {}).get("text", "")
+    texto = data.get("message", "")
 
     print("🔎 Número recebido:", numero)
     print("🔎 Texto recebido:", texto)
 
     if numero and texto:
         texto = texto.strip().lower()
+
         if texto in ["1", "sim"]:
             resposta = "✅ Agradecemos seu retorno! Qualquer dúvida, estamos à disposição."
         elif texto in ["2", "não", "nao"]:
@@ -41,10 +42,9 @@ def webhook():
         r = requests.post(ZAPI_URL, json=payload, headers=HEADERS)
         print("✅ Retorno da Z-API:", r.status_code, r.text)
     else:
-        print("⚠️ Número ou texto não encontrados na mensagem recebida.")
+        print("⚠️ Número ou texto ausentes na mensagem recebida.")
 
     return jsonify({"status": "ok"})
-
 
 # Necessário para a Render
 if __name__ == '__main__':
