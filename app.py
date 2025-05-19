@@ -20,9 +20,13 @@ def webhook():
     print("📩 Dados recebidos do Z-API:", data)
 
     numero = data.get("message", {}).get("phone")
-    texto = data.get("message", {}).get("text", "").strip().lower()
+    texto = data.get("message", {}).get("text", "")
+
+    print("🔎 Número recebido:", numero)
+    print("🔎 Texto recebido:", texto)
 
     if numero and texto:
+        texto = texto.strip().lower()
         if texto in ["1", "sim"]:
             resposta = "✅ Agradecemos seu retorno! Qualquer dúvida, estamos à disposição."
         elif texto in ["2", "não", "nao"]:
@@ -36,8 +40,11 @@ def webhook():
 
         r = requests.post(ZAPI_URL, json=payload, headers=HEADERS)
         print("✅ Retorno da Z-API:", r.status_code, r.text)
+    else:
+        print("⚠️ Número ou texto não encontrados na mensagem recebida.")
 
     return jsonify({"status": "ok"})
+
 
 # Necessário para a Render
 if __name__ == '__main__':
